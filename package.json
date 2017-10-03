@@ -30,7 +30,8 @@
     "lint": "npm run tslint",
     "tslint": "tslint -c tslint.json -p tsconfig.json --exclude node_modules/**",
     "watch": "tsc -w",
-    "watch:test": "tsc -d -w & ava --watch"
+    "watch:test": "tsc -d -w & ava --watch",
+    "preinstall": "npm run build"
   },
   "dependencies": {
     "aws-sdk": "^2.90.0",
