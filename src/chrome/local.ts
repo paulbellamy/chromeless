@@ -26,6 +26,20 @@ export default class LocalChrome implements Chrome {
       ? await this.startChrome()
       : await this.connectToChrome()
 
+    if (this.options.debug) {
+      const { Runtime } = client;
+      await Runtime.enable();
+      Runtime.consoleAPICalled(({type,args}) => {
+        console[type].apply(
+          console,
+          args
+            .filter(o => Object.prototype.hasOwnProperty.call(o, 'value') || Object.prototype.hasOwnProperty.call(o, 'description'))
+            .map(o => o.value || o.description)
+            .filter(v => !v.match(/^font-weight:[^;]+;color:[^;]+;$/)),
+        )
+      });
+    }
+
     const { viewport = {} as DeviceMetrics } = this.options
     await setViewport(client, viewport as DeviceMetrics)
 
